@@ -3,110 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome Dashboard</title>
+  <title>Welcome Website</title>
   <style>
     body {
       margin: 0;
+      padding: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #111;
-      color: white;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       overflow: hidden;
-      flex-direction: column;
-    }
-
-    #nameInputBox {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    input {
-      padding: 8px;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 10px;
-      font-size: 16px;
-    }
-
-    button {
-      padding: 8px 15px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      background: #0af;
       color: white;
+    }
+
+    .fade {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .fade.show {
+      opacity: 1;
+    }
+
+    .screen {
+      display: none;
+      text-align: center;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    button, .done-btn {
+      padding: 10px 20px;
+      border: none;
+      background: white;
+      color: #333;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
       transition: 0.3s;
     }
-
-    button:hover {
-      background: #09c;
+    button:hover, .done-btn:hover {
+      background: #ddd;
     }
 
-    .flicker {
-      margin-top: 15px;
-      font-size: 18px;
-      animation: flicker 1.2s infinite alternate;
-      cursor: pointer;
-    }
-
-    @keyframes flicker {
-      0% { opacity: 1; }
-      50% { opacity: 0.3; }
-      100% { opacity: 1; }
-    }
-
-    #dashboard {
-      display: none;
-      width: 100%;
-      height: 100vh;
-      background: white;
-      color: black;
+    .input-box {
+      display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 24px;
+      margin-top: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px 0 0 10px;
+      outline: none;
+    }
+    .done-btn {
+      border-radius: 0 10px 10px 0;
     }
   </style>
 </head>
 <body>
-
-  <!-- Name Input -->
-  <div id="nameInputBox">
-    <input type="text" id="username" placeholder="Enter your name">
-    <button onclick="showWelcome()">Start</button>
+  <!-- Screen 1 -->
+  <div id="welcomeScreen" class="screen active fade">
+    <h1>Welcome</h1>
+    <button onclick="goToName()">Next</button>
   </div>
 
-  <!-- Welcome Screen -->
-  <div id="welcomeScreen" style="display:none; text-align:center;">
+  <!-- Screen 2 -->
+  <div id="nameScreen" class="screen fade">
+    <h1>Provide us your name, for better conversation</h1>
+    <div class="input-box">
+      <input type="text" id="username" placeholder="Enter your name">
+      <button class="done-btn" onclick="saveName()">Done</button>
+    </div>
+  </div>
+
+  <!-- Screen 3 -->
+  <div id="dashboard" class="screen fade">
     <h1 id="greeting"></h1>
-    <div class="flicker" onclick="openDashboard()">Click on screen for next</div>
-  </div>
-
-  <!-- Dashboard -->
-  <div id="dashboard">
-    <h2>🎮 Your White Dashboard (Game area)</h2>
+    <p>🎉 This is your main dashboard</p>
   </div>
 
   <script>
-    function showWelcome() {
-      let name = document.getElementById("username").value;
-      if (name.trim() === "") name = "User";
-
-      document.getElementById("nameInputBox").style.display = "none";
-      document.getElementById("welcomeScreen").style.display = "block";
-
-      document.getElementById("greeting").innerText = `Hello, ${name}!`;
+    function fadeOutIn(current, next) {
+      document.getElementById(current).classList.remove("show");
+      setTimeout(() => {
+        document.getElementById(current).classList.remove("active");
+        document.getElementById(next).classList.add("active");
+        setTimeout(() => {
+          document.getElementById(next).classList.add("show");
+        }, 50);
+      }, 1000);
     }
 
-    function openDashboard() {
-      document.getElementById("welcomeScreen").style.display = "none";
-      document.getElementById("dashboard").style.display = "flex";
+    // Next button
+    function goToName() {
+      fadeOutIn("welcomeScreen", "nameScreen");
     }
+
+    // Save Name
+    function saveName() {
+      let name = document.getElementById("username").value.trim();
+      if (name) {
+        localStorage.setItem("userName", name);
+        document.getElementById("greeting").innerText = "Hello, " + name + "!";
+        fadeOutIn("nameScreen", "dashboard");
+      }
+    }
+
+    // On load check if name already saved
+    window.onload = function() {
+      let savedName = localStorage.getItem("userName");
+      if (savedName) {
+        document.getElementById("welcomeScreen").classList.remove("active", "show");
+        document.getElementById("dashboard").classList.add("active", "show");
+        document.getElementById("greeting").innerText = "Hello, " + savedName + "!";
+      } else {
+        setTimeout(() => {
+          document.getElementById("welcomeScreen").classList.add("show");
+        }, 50);
+      }
+    };
   </script>
-
 </body>
 </html>
