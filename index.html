@@ -39,18 +39,44 @@
       margin-bottom: 20px;
     }
 
+    .flicker {
+      font-size: 1.2rem;
+      animation: flicker 1.5s infinite;
+      cursor: pointer;
+    }
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* White background screens */
+    .white-bg {
+      background: white;
+      color: black;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
     button, .done-btn {
       padding: 10px 20px;
       border: none;
-      background: white;
-      color: #333;
+      background: black;
+      color: white;
       font-size: 1rem;
       border-radius: 10px;
       cursor: pointer;
       transition: 0.3s;
+      margin-left: 5px;
     }
     button:hover, .done-btn:hover {
-      background: #ddd;
+      background: #333;
     }
 
     .input-box {
@@ -62,7 +88,7 @@
     input {
       padding: 10px;
       font-size: 1rem;
-      border: none;
+      border: 2px solid black;
       border-radius: 10px 0 0 10px;
       outline: none;
     }
@@ -75,11 +101,11 @@
   <!-- Screen 1 -->
   <div id="welcomeScreen" class="screen active fade">
     <h1>Welcome</h1>
-    <button onclick="goToName()">Next</button>
+    <p class="flicker" onclick="goToName()">Click on screen for next</p>
   </div>
 
   <!-- Screen 2 -->
-  <div id="nameScreen" class="screen fade">
+  <div id="nameScreen" class="screen fade white-bg">
     <h1>Provide us your name, for better conversation</h1>
     <div class="input-box">
       <input type="text" id="username" placeholder="Enter your name">
@@ -88,9 +114,8 @@
   </div>
 
   <!-- Screen 3 -->
-  <div id="dashboard" class="screen fade">
+  <div id="dashboard" class="screen fade white-bg">
     <h1 id="greeting"></h1>
-    <p>🎉 This is your main dashboard</p>
   </div>
 
   <script>
@@ -105,7 +130,7 @@
       }, 1000);
     }
 
-    // Next button
+    // Next (welcome → name screen)
     function goToName() {
       fadeOutIn("welcomeScreen", "nameScreen");
     }
@@ -124,6 +149,7 @@
     window.onload = function() {
       let savedName = localStorage.getItem("userName");
       if (savedName) {
+        document.body.style.background = "white";
         document.getElementById("welcomeScreen").classList.remove("active", "show");
         document.getElementById("dashboard").classList.add("active", "show");
         document.getElementById("greeting").innerText = "Hello, " + savedName + "!";
