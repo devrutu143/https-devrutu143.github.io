@@ -3,66 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Professional Website</title>
+  <title>Mera Website</title>
+
+  <!-- CSS yahi likh diya -->
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-    }
-    header {
-      background: #222;
-      color: white;
-      padding: 15px;
+      background: #f0f0f0;
       text-align: center;
+      margin-top: 50px;
     }
-    nav {
-      background: #444;
-      display: flex;
-      justify-content: center;
-    }
-    nav a {
+    button {
+      padding: 10px 20px;
+      background: blue;
       color: white;
-      padding: 14px 20px;
-      text-decoration: none;
-    }
-    nav a:hover {
-      background: #666;
-    }
-    section {
-      padding: 40px;
-      text-align: center;
-    }
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Welcome to My Website</h1>
-    <p>Professional | Clean | Modern</p>
-  </header>
+  <h1>Welcome to My Website</h1>
+  <button onclick="sayHello()">Click Me</button>
 
-  <nav>
-    <a href="#">Home</a>
-    <a href="#">About</a>
-    <a href="#">Projects</a>
-    <a href="#">Contact</a>
-  </nav>
-
-  <section>
-    <h2>Hello, I'm Rutu 👋</h2>
-    <p>This is my professional website made using GitHub Pages.</p>
-  </section>
-
-  <footer>
-    <p>© 2025 My Website | Built with ❤️ by Rutu</p>
-  </footer>
+  <!-- JS yahi likh diya -->
+  <script>
+    function sayHello() {
+      alert("Hello Rutu! Website chal rha hai 😎");
+    }
+  </script>
 </body>
 </html>
