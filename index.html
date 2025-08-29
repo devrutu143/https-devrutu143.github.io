@@ -3,154 +3,110 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rutu's Website</title>
+  <title>Welcome Dashboard</title>
   <style>
-    /* Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      font-family: Arial, sans-serif;
+      margin: 0;
       height: 100vh;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
+      background: #111;
+      color: white;
+      font-family: Arial, sans-serif;
       overflow: hidden;
+      flex-direction: column;
     }
 
-    .fade {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
+    #nameInputBox {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .fade.show {
-      opacity: 1;
-    }
-
-    .container {
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-    }
-
-    h1, h2, p {
-      margin-bottom: 20px;
+    input {
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      margin-bottom: 10px;
+      font-size: 16px;
     }
 
     button {
-      padding: 10px 20px;
+      padding: 8px 15px;
+      border-radius: 8px;
       border: none;
-      border-radius: 25px;
-      background: #fff;
-      color: #2575fc;
-      font-weight: bold;
       cursor: pointer;
+      font-size: 16px;
+      background: #0af;
+      color: white;
       transition: 0.3s;
     }
 
     button:hover {
-      background: #eee;
+      background: #09c;
     }
 
-    .input-container {
-      display: flex;
-      align-items: center;
+    .flicker {
+      margin-top: 15px;
+      font-size: 18px;
+      animation: flicker 1.2s infinite alternate;
+      cursor: pointer;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    #dashboard {
+      display: none;
+      width: 100%;
+      height: 100vh;
+      background: white;
+      color: black;
       justify-content: center;
-      gap: 10px;
-    }
-
-    input {
-      padding: 10px;
-      border-radius: 25px;
-      border: none;
-      outline: none;
-      width: 60%;
-    }
-
-    #dashboard h2 {
-      font-size: 26px;
-      margin-bottom: 10px;
+      align-items: center;
+      font-size: 24px;
     }
   </style>
 </head>
 <body>
-  <!-- Welcome Screen -->
-  <div id="welcome" class="container fade show">
-    <h1>Welcome 👋</h1>
-    <button onclick="goToName()">Next</button>
+
+  <!-- Name Input -->
+  <div id="nameInputBox">
+    <input type="text" id="username" placeholder="Enter your name">
+    <button onclick="showWelcome()">Start</button>
   </div>
 
-  <!-- Name Input Screen -->
-  <div id="nameScreen" class="container fade" style="display:none;">
-    <h2>Provide us your name</h2>
-    <p>For better conversation 😊</p>
-    <div class="input-container">
-      <input type="text" id="nameInput" placeholder="Enter your name">
-      <button onclick="saveName()">Done</button>
-    </div>
+  <!-- Welcome Screen -->
+  <div id="welcomeScreen" style="display:none; text-align:center;">
+    <h1 id="greeting"></h1>
+    <div class="flicker" onclick="openDashboard()">Click on screen for next</div>
   </div>
 
   <!-- Dashboard -->
-  <div id="dashboard" class="container fade" style="display:none;">
-    <h2 id="greeting"></h2>
-    <p>Welcome to your dashboard 🚀</p>
+  <div id="dashboard">
+    <h2>🎮 Your White Dashboard (Game area)</h2>
   </div>
 
   <script>
-    const welcome = document.getElementById("welcome");
-    const nameScreen = document.getElementById("nameScreen");
-    const dashboard = document.getElementById("dashboard");
-    const greeting = document.getElementById("greeting");
-    const nameInput = document.getElementById("nameInput");
+    function showWelcome() {
+      let name = document.getElementById("username").value;
+      if (name.trim() === "") name = "User";
 
-    // Agar user pehle se name save kar chuka hai
-    window.onload = () => {
-      const savedName = localStorage.getItem("username");
-      if (savedName) {
-        showDashboard(savedName);
-      }
-    };
+      document.getElementById("nameInputBox").style.display = "none";
+      document.getElementById("welcomeScreen").style.display = "block";
 
-    function goToName() {
-      fadeOut(welcome, () => {
-        nameScreen.style.display = "block";
-        fadeIn(nameScreen);
-      });
+      document.getElementById("greeting").innerText = `Hello, ${name}!`;
     }
 
-    function saveName() {
-      const name = nameInput.value.trim();
-      if (name) {
-        localStorage.setItem("username", name);
-        fadeOut(nameScreen, () => {
-          showDashboard(name);
-        });
-      } else {
-        alert("Please enter your name 🙂");
-      }
-    }
-
-    function showDashboard(name) {
-      greeting.textContent = `Hello, ${name}!`;
-      dashboard.style.display = "block";
-      fadeIn(dashboard);
-    }
-
-    // Animation helpers
-    function fadeOut(element, callback) {
-      element.classList.remove("show");
-      setTimeout(() => {
-        element.style.display = "none";
-        if (callback) callback();
-      }, 1000); // 1s = same as CSS transition
-    }
-
-    function fadeIn(element) {
-      setTimeout(() => {
-        element.classList.add("show");
-      }, 50);
+    function openDashboard() {
+      document.getElementById("welcomeScreen").style.display = "none";
+      document.getElementById("dashboard").style.display = "flex";
     }
   </script>
+
 </body>
 </html>
