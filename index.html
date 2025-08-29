@@ -3,34 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mera Website</title>
-
-  <!-- CSS yahi likh diya -->
+  <title>Rutu's Website</title>
   <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       font-family: Arial, sans-serif;
-      background: #f0f0f0;
-      text-align: center;
-      margin-top: 50px;
+      height: 100vh;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
+
+    .fade {
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .fade.show {
+      opacity: 1;
+    }
+
+    .container {
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1, h2, p {
+      margin-bottom: 20px;
+    }
+
     button {
       padding: 10px 20px;
-      background: blue;
-      color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 25px;
+      background: #fff;
+      color: #2575fc;
+      font-weight: bold;
       cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #eee;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      width: 60%;
+    }
+
+    #dashboard h2 {
+      font-size: 26px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to My Website</h1>
-  <button onclick="sayHello()">Click Me</button>
+  <!-- Welcome Screen -->
+  <div id="welcome" class="container fade show">
+    <h1>Welcome 👋</h1>
+    <button onclick="goToName()">Next</button>
+  </div>
 
-  <!-- JS yahi likh diya -->
+  <!-- Name Input Screen -->
+  <div id="nameScreen" class="container fade" style="display:none;">
+    <h2>Provide us your name</h2>
+    <p>For better conversation 😊</p>
+    <div class="input-container">
+      <input type="text" id="nameInput" placeholder="Enter your name">
+      <button onclick="saveName()">Done</button>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="container fade" style="display:none;">
+    <h2 id="greeting"></h2>
+    <p>Welcome to your dashboard 🚀</p>
+  </div>
+
   <script>
-    function sayHello() {
-      alert("Hello Rutu! Website chal rha hai 😎");
+    const welcome = document.getElementById("welcome");
+    const nameScreen = document.getElementById("nameScreen");
+    const dashboard = document.getElementById("dashboard");
+    const greeting = document.getElementById("greeting");
+    const nameInput = document.getElementById("nameInput");
+
+    // Agar user pehle se name save kar chuka hai
+    window.onload = () => {
+      const savedName = localStorage.getItem("username");
+      if (savedName) {
+        showDashboard(savedName);
+      }
+    };
+
+    function goToName() {
+      fadeOut(welcome, () => {
+        nameScreen.style.display = "block";
+        fadeIn(nameScreen);
+      });
+    }
+
+    function saveName() {
+      const name = nameInput.value.trim();
+      if (name) {
+        localStorage.setItem("username", name);
+        fadeOut(nameScreen, () => {
+          showDashboard(name);
+        });
+      } else {
+        alert("Please enter your name 🙂");
+      }
+    }
+
+    function showDashboard(name) {
+      greeting.textContent = `Hello, ${name}!`;
+      dashboard.style.display = "block";
+      fadeIn(dashboard);
+    }
+
+    // Animation helpers
+    function fadeOut(element, callback) {
+      element.classList.remove("show");
+      setTimeout(() => {
+        element.style.display = "none";
+        if (callback) callback();
+      }, 1000); // 1s = same as CSS transition
+    }
+
+    function fadeIn(element) {
+      setTimeout(() => {
+        element.classList.add("show");
+      }, 50);
     }
   </script>
 </body>
