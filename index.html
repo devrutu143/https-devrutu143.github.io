@@ -1,164 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome Website</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      overflow: hidden;
-      color: white;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RutuDev Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
 
-    .fade {
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-    .fade.show {
-      opacity: 1;
-    }
+        body {
+            background: #121212;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
 
-    .screen {
-      display: none;
-      text-align: center;
-    }
-    .screen.active {
-      display: block;
-    }
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #1e3a8a, #7e22ce);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            cursor: pointer;
+            position: relative;
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
 
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
+        .hero.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
 
-    .flicker {
-      font-size: 1.2rem;
-      animation: flicker 1.5s infinite;
-      cursor: pointer;
-    }
-    @keyframes flicker {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
+        .hero h1 {
+            font-size: 3.5rem;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid #fff;
+            animation: typewriter 3s steps(20) 1s 1 normal both,
+                       blink-caret 0.75s step-end infinite;
+        }
 
-    /* White background screens */
-    .white-bg {
-      background: white;
-      color: black;
-      height: 100vh;
-      width: 100vw;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
+        .flicker {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            animation: flicker 2s infinite;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+        }
 
-    button, .done-btn {
-      padding: 10px 20px;
-      border: none;
-      background: black;
-      color: white;
-      font-size: 1rem;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-left: 5px;
-    }
-    button:hover, .done-btn:hover {
-      background: #333;
-    }
+        /* Dashboard Section */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
+            color: #333;
+            padding: 50px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
 
-    .input-box {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-    input {
-      padding: 10px;
-      font-size: 1rem;
-      border: 2px solid black;
-      border-radius: 10px 0 0 10px;
-      outline: none;
-    }
-    .done-btn {
-      border-radius: 0 10px 10px 0;
-    }
-  </style>
+        .dashboard.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dashboard h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Game Section (Paddle Ball) */
+        .game-section {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
+            color: #333;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .game-section.visible {
+            display: block;
+        }
+
+        #gameCanvas {
+            border: 2px solid #333;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #score {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        /* Tic Tac Toe Section */
+        .tictactoe-section {
+            display: none;
+            min-height: 100vh;
+            background: #f5f5f5;
+            color: #333;
+            padding: 50px;
+            text-align: center;
+        }
+
+        .tictactoe-section.visible {
+            display: block;
+        }
+
+        .name-input, .difficulty-selection {
+            margin-bottom: 20px;
+        }
+
+        .name-input input {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+
+        .difficulty-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            background: #ff6f61;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .vs-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateX(-100%);
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        .tictactoe-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border: 2px solid #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cell:hover {
+            background: #e0e0e0;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background: #ff6f61;
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Animations */
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #fff; }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .dashboard, .game-section, .tictactoe-section {
+                padding: 20px;
+            }
+            .card {
+                width: 100%;
+            }
+            #gameCanvas, .tictactoe-board {
+                width: 100%;
+                max-width: 300px;
+            }
+            .cell {
+                width: calc(100% / 3 - 10px);
+                height: calc(100% / 3 - 10px);
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Screen 1 -->
-  <div id="welcomeScreen" class="screen active fade">
-    <h1>Welcome</h1>
-    <p class="flicker" onclick="goToName()">Click on screen for next</p>
-  </div>
+    <section class="hero" id="hero">
+        <h1>Welcome To RutuDev Studio!</h1>
+        <p class="flicker">Click on screen for next</p>
+    </section>
 
-  <!-- Screen 2 -->
-  <div id="nameScreen" class="screen fade white-bg">
-    <h1>Provide us your name, for better conversation</h1>
-    <div class="input-box">
-      <input type="text" id="username" placeholder="Enter your name">
-      <button class="done-btn" onclick="saveName()">Done</button>
-    </div>
-  </div>
+    <section class="dashboard" id="dashboard">
+        <h2>RutuDev Dashboard</h2>
+        <div class="card-container">
+            <div class="card" id="game-card">
+                <h3>Paddle Ball Game</h3>
+                <p>Play a fun bouncing game!</p>
+            </div>
+            <div class="card" id="tictactoe-card">
+                <h3>Tic Tac Toe</h3>
+                <p>Challenge Rutu AI!</p>
+            </div>
+            <div class="card">
+                <h3>Project 3</h3>
+                <p>Creative designs.</p>
+            </div>
+        </div>
+    </section>
 
-  <!-- Screen 3 -->
-  <div id="dashboard" class="screen fade white-bg">
-    <h1 id="greeting"></h1>
-  </div>
+    <section class="game-section" id="game-section">
+        <h2>Paddle Ball Game</h2>
+        <canvas id="gameCanvas" width="300" height="200"></canvas>
+        <p id="score">Score: 0</p>
+        <button class="back-btn" id="back-btn">Back to Dashboard</button>
+    </section>
 
-  <script>
-    function fadeOutIn(current, next) {
-      document.getElementById(current).classList.remove("show");
-      setTimeout(() => {
-        document.getElementById(current).classList.remove("active");
-        document.getElementById(next).classList.add("active");
-        setTimeout(() => {
-          document.getElementById(next).classList.add("show");
-        }, 50);
-      }, 1000);
-    }
+    <section class="tictactoe-section" id="tictactoe-section">
+        <h2>Tic Tac Toe</h2>
+        <div class="name-input">
+            <input type="text" id="player-name" placeholder="Enter your name">
+            <button class="difficulty-btn" onclick="startTicTacToe()">Start</button>
+        </div>
+        <div class="difficulty-selection" id="difficulty-selection" style="display: none;">
+            <button class="difficulty-btn" onclick="setDifficulty('Easy')">Easy</button>
+            <button class="difficulty-btn" onclick="setDifficulty('Medium')">Medium</button>
+            <button class="difficulty-btn" onclick="setDifficulty('Hardcore')">Hardcore</button>
+        </div>
+        <div class="vs-text" id="vs-text" style="display: none;"></div>
+        <div class="tictactoe-board" id="tictactoe-board" style="display: none;"></div>
+        <button class="back-btn" id="tictactoe-back-btn">Back to Dashboard</button>
+    </section>
 
-    // Next (welcome → name screen)
-    function goToName() {
-      fadeOutIn("welcomeScreen", "nameScreen");
-    }
+    <script>
+        // Navigation Fix: Hero to Dashboard with Animation
+        const hero = document.getElementById('hero');
+        const dashboard = document.getElementById('dashboard');
+        const gameSection = document.getElementById('game-section');
+        const tictactoeSection = document.getElementById('tictactoe-section');
+        const gameCard = document.getElementById('game-card');
+        const tictactoeCard = document.getElementById('tictactoe-card');
+        const backBtn = document.getElementById('back-btn');
+        const tictactoeBackBtn = document.getElementById('tictactoe-back-btn');
 
-    // Save Name
-    function saveName() {
-      let name = document.getElementById("username").value.trim();
-      if (name) {
-        localStorage.setItem("userName", name);
-        document.getElementById("greeting").innerText = "Hello, " + name + "!";
-        fadeOutIn("nameScreen", "dashboard");
-      }
-    }
+        hero.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            hero.classList.add('hidden');
+            setTimeout(() => {
+                hero.style.display = 'none';
+                dashboard.style.display = 'block';
+                dashboard.classList.add('visible');
+            }, 500); // Match transition duration
+        });
 
-    // On load check if name already saved
-    window.onload = function() {
-      let savedName = localStorage.getItem("userName");
-      if (savedName) {
-        document.body.style.background = "white";
-        document.getElementById("welcomeScreen").classList.remove("active", "show");
-        document.getElementById("dashboard").classList.add("active", "show");
-        document.getElementById("greeting").innerText = "Hello, " + savedName + "!";
-      } else {
-        setTimeout(() => {
-          document.getElementById("welcomeScreen").classList.add("show");
-        }, 50);
-      }
-    };
-  </script>
+        gameCard.addEventListener('click', () => {
+            dashboard.style.display = 'none';
+            gameSection.classList.add('visible');
+            gameSection.style.display = 'block';
+            startGame();
+        });
+
+        tictactoeCard.addEventListener('click', () => {
+            dashboard.style.display = 'none';
+            tictactoeSection.classList.add('visible');
+            tictactoeSection.style.display = 'block';
+        });
+
+        backBtn.addEventListener('click', () => {
+            gameSection.style.display = 'none';
+            dashboard.classList.add('visible');
+            dashboard.style.display = 'block';
+            stopGame();
+        });
+
+        tictactoeBackBtn.addEventListener('click', () => {
+            tictactoeSection.style.display = 'none';
+            dashboard.classList.add('visible');
+            dashboard.style.display = 'block';
+            resetTicTacToe();
+        });
+
+        // Paddle Ball Game
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('score');
+
+        let score = 0;
+        let paddleX = canvas.width / 2 - 40;
+        const paddleWidth = 80;
+        const paddleHeight = 10;
+        const paddleY = canvas.height - 20;
+        let ballX = canvas.width / 2;
+        let ballY = canvas.height / 2;
+        let ballDX = 2;
+        let ballDY = -2;
+        const ballRadius = 5;
+        let touchX = null;
+        let gameRunning = false;
+        let animationFrameId;
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            touchX = touch.clientX - rect.left - paddleWidth / 2;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            touchX = e.clientX - rect.left - paddleWidth / 2;
+        });
+
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.rect(paddleX, paddleY, paddleWidth, paddleHeight);
+            ctx.fillStyle = '#ff6f61';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#333';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function updateGame() {
+            if (!gameRunning) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (touchX !== null) {
+                paddleX = Math.max(0, Math.min(touchX, canvas.width - paddleWidth));
+            }
+
+            ballX += ballDX;
+            ballY += ballDY;
+
+            if (ballX + ballRadius > canvas.width || ballX - ballRadius < 0) {
+                ballDX = -ballDX;
+            }
+            if (ballY - ballRadius < 0) {
+                ballDY = -ballDY;
+            }
+
+            if (
+                ballY + ballRadius > paddleY &&
+                ballY - ballRadius < paddleY + paddleHeight &&
+                ballX > paddleX &&
+                ballX < paddleX + paddleWidth
+            ) {
+                ballDY = -Math.abs(ballDY);
+                score += 10;
+                scoreDisplay.textContent = `Score: ${score}`;
+            }
+
+            if (ballY + ballRadius > canvas.height) {
+                gameRunning = false;
+                alert(`Game Over! Score: ${score}`);
+                score = 0;
+                scoreDisplay.textContent = `Score: ${score}`;
+                ballX = canvas.width / 2;
+                ballY = canvas.height / 2;
+                ballDY = -2;
+                paddleX = canvas.width / 2 - 40;
+                touchX = null;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawPaddle();
+                drawBall();
+                return;
+            }
+
+            drawPaddle();
+            drawBall();
+            animationFrameId = requestAnimationFrame(updateGame);
+        }
+
+        function startGame() {
+            if (!gameRunning) {
+                gameRunning = true;
+                updateGame();
+            }
+        }
+
+        function stopGame() {
+            gameRunning = false;
+            cancelAnimationFrame(animationFrameId);
+        }
+
+        drawPaddle();
+        drawBall();
+
+        // Tic Tac Toe Game
+        let playerName = '';
+        let difficulty = '';
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        const vsText = document.getElementById('vs-text');
+        const tictactoeBoard = document.getElementById('tictactoe-board');
+        const playerNameInput = document.getElementById('player-name');
+
+        function startTicTacToe() {
+            playerName = playerNameInput.value.trim();
+            if (!playerName) {
+                alert('Please enter your name!');
+                return;
+            }
+            document.querySelector('.name-input').style.display = 'none';
+            document.getElementById('difficulty-selection').style.display = 'block';
+        }
+
+        function setDifficulty(level) {
+            difficulty = level;
+            document.getElementById('difficulty-selection').style.display = 'none';
+            vsText.style.display = 'block';
+            vsText.textContent = `${playerName} vs Rutu`;
+            tictactoeBoard.style.display = 'grid';
+            resetBoard();
+        }
+
+        function resetBoard() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            tictactoeBoard.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.index = i;
+                cell.addEventListener('click', () => makeMove(i));
+                tictactoeBoard.appendChild(cell);
+            }
+        }
+
+        function makeMove(index) {
+            if (board[index] || checkWinner()) return;
+            board[index] = 'X';
+            document.querySelector(`.cell[data-index="${index}"]`).textContent = 'X';
+            if (checkWinner()) {
+                alert(`${playerName} wins!`);
+                return;
+            }
+            if (board.every(cell => cell)) {
+                alert("It's a tie!");
+                return;
+            }
+            currentPlayer = 'O';
+            setTimeout(rutuMove, 500);
+        }
+
+        function rutuMove() {
+            let move;
+            if (difficulty === 'Easy') {
+                move = getRandomMove();
+            } else if (difficulty === 'Medium') {
+                move = getMediumMove();
+            } else if (difficulty === 'Hardcore') {
+                move = getBestMove();
+            }
+            if (move !== undefined) {
+                board[move] = 'O';
+                document.querySelector(`.cell[data-index="${move}"]`).textContent = 'O';
+                if (checkWinner()) {
+                    alert('Rutu wins!');
+                    return;
+                }
+                if (board.every(cell => cell)) {
+                    alert("It's a tie!");
+                    return;
+                }
+                currentPlayer = 'X';
+            }
+        }
+
+        function getRandomMove() {
+            const available = board.reduce((acc, cell, i) => (cell === '' ? [...acc, i] : acc), []);
+            return available[Math.floor(Math.random() * available.length)];
+        }
+
+        function getMediumMove() {
+            for (let i = 0; i < 9; i++) {
+                if (!board[i]) {
+                    board[i] = 'O';
+                    if (checkWinner()) {
+                        board[i] = '';
+                        return i;
+                    }
+                    board[i] = '';
+                }
+            }
+            for (let i = 0; i < 9; i++) {
+                if (!board[i]) {
+                    board[i] = 'X';
+                    if (checkWinner()) {
+                        board[i] = '';
+                        return i;
+                    }
+                    board[i] = '';
+                }
+            }
+            return getRandomMove();
+        }
+
+        function getBestMove() {
+            let bestScore = -Infinity;
+            let move;
+            for (let i = 0; i < 9; i++) {
+                if (!board[i]) {
+                    board[i] = 'O';
+                    let score = minimax(board, 0, false);
+                    board[i] = '';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = i;
+                    }
+                }
+            }
+            return move;
+        }
+
+        function minimax(board, depth, isMaximizing) {
+            if (checkWinner()) {
+                return isMaximizing ? -1 : 1;
+            }
+            if (board.every(cell => cell)) return 0;
+
+            if (isMaximizing) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (!board[i]) {
+                        board[i] = 'O';
+                        let score = minimax(board, depth + 1, false);
+                        board[i] = '';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < 9; i++) {
+                    if (!board[i]) {
+                        board[i] = 'X';
+                        let score = minimax(board, depth + 1, true);
+                        board[i] = '';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+            for (let pattern of winPatterns) {
+                if (board[pattern[0]] && board[pattern[0]] === board[pattern[1]] && board[pattern[1]] === board[pattern[2]]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function resetTicTacToe() {
+            playerName = '';
+            difficulty = '';
+            board = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            playerNameInput.value = '';
+            document.querySelector('.name-input').style.display = 'block';
+            document.getElementById('difficulty-selection').style.display = 'none';
+            vsText.style.display = 'none';
+            tictactoeBoard.style.display = 'none';
+        }
+    </script>
 </body>
-</html>
