@@ -1,4 +1,4 @@
-/* Base styles for mobile-friendliness */
+/* Unchanged from previous version */
 * {
     margin: 0;
     padding: 0;
@@ -215,19 +215,13 @@ header h1 {
     border-radius: 5px;
 }
 
-.secret-quote {
-    text-align: center;
-    font-style: italic;
-    color: #6a1b9a;
-    margin-top: 15px;
-    animation: fade-in 1.5s ease-out;
-}
-
 .secret-signature {
     text-align: center;
+    font-style: italic;
     font-size: 0.9em;
     color: #ab47bc;
     margin-top: 10px;
+    animation: fade-in 1.5s ease-out;
 }
 
 .error {
