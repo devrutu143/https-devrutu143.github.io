@@ -1,4 +1,3 @@
-// Unchanged from previous version
 // User Name Handling
 const userNameInput = document.getElementById('user-name');
 const saveNameBtn = document.getElementById('save-name');
@@ -17,6 +16,7 @@ const secretsSection = document.getElementById('secrets-section');
 const passwordInput = document.getElementById('password-input');
 const submitPasswordBtn = document.getElementById('submit-password');
 const passwordError = document.getElementById('password-error');
+const nextWebsiteBtn = document.getElementById('next-website-btn');
 
 let userName = ''; // No localStorage, reset on load
 let scores = JSON.parse(localStorage.getItem('scores')) || { tic: 0, rps: 0, memory: 0 }; // Keep scores in localStorage
@@ -65,6 +65,10 @@ submitPasswordBtn.addEventListener('click', () => {
         passwordError.classList.remove('hidden');
         passwordInput.value = '';
     }
+});
+
+nextWebsiteBtn.addEventListener('click', () => {
+    window.location.href = 'https://www.youtube.com';
 });
 
 function showDashboard() {
