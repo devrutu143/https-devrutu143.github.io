@@ -1,4 +1,4 @@
-/* Unchanged from previous version */
+/* Base styles for mobile-friendliness */
 * {
     margin: 0;
     padding: 0;
@@ -198,6 +198,45 @@ header h1 {
     animation: spin 1s linear infinite;
 }
 
+.photo-frame {
+    margin: 20px auto;
+    padding: 10px;
+    background: #f3e5f5;
+    border: 5px solid #ab47bc;
+    border-radius: 10px;
+    max-width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.photo-frame img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+}
+
+.secret-quote {
+    text-align: center;
+    font-style: italic;
+    color: #6a1b9a;
+    margin-top: 15px;
+    animation: fade-in 1.5s ease-out;
+}
+
+.secret-signature {
+    text-align: center;
+    font-size: 0.9em;
+    color: #ab47bc;
+    margin-top: 10px;
+}
+
+.error {
+    color: #d32f2f;
+    text-align: center;
+    margin-top: 10px;
+    animation: shake 0.3s ease;
+}
+
 @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -225,6 +264,14 @@ header h1 {
     to { transform: rotate(360deg); }
 }
 
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
 .fade-in {
     animation: fade-in 1s ease-out;
 }
@@ -250,5 +297,7 @@ footer {
     .card {
         height: 60px;
     }
+    .photo-frame {
+        width: 90%;
     }
-    
+    }
