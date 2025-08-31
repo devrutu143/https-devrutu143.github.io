@@ -1,0 +1,253 @@
+/* Unchanged from previous version */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 100%;
+    width: 400px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: fade-in 1s ease-out;
+}
+
+header h1 {
+    text-align: center;
+    color: #6a1b9a;
+    margin-bottom: 20px;
+}
+
+#welcome-note {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #6a1b9a;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: #6a1b9a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+    background: #4a148c;
+    transform: scale(1.05);
+}
+
+.game-btn {
+    background: #ab47bc;
+}
+
+.game-btn:hover {
+    background: #8e24aa;
+}
+
+.hidden {
+    display: none;
+}
+
+.game-container {
+    text-align: center;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin: 20px auto;
+    width: 300px;
+}
+
+.cell {
+    background: #f3e5f5;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.cell:hover {
+    background: #e1bee7;
+}
+
+.choices-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.choice {
+    padding: 15px 30px;
+    margin: 10px;
+    background: #ce93d8;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.choice.bounce {
+    animation: bounce 0.3s ease;
+}
+
+#vs-graphic {
+    font-size: 2em;
+    color: #ffca28;
+    animation: scale-vs 0.5s ease;
+}
+
+#memory-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 20px auto;
+    width: 300px;
+}
+
+.card {
+    background: #ba68c8;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    cursor: pointer;
+    transition: transform 0.3s;
+    transform-style: preserve-3d;
+}
+
+.card.flipped {
+    transform: rotateY(180deg);
+    background: #fff;
+}
+
+.card.matched {
+    background: #7b1fa2;
+    color: white;
+}
+
+#leaderboard {
+    list-style: none;
+}
+
+#leaderboard li {
+    background: #f3e5f5;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+}
+
+.quote {
+    text-align: center;
+    font-style: italic;
+    color: #6a1b9a;
+    margin-top: 20px;
+    animation: fade-in 1.5s ease-out;
+}
+
+.quote::after {
+    content: '~Rutu';
+    display: block;
+    font-size: 0.9em;
+    margin-top: 10px;
+    color: #ab47bc;
+}
+
+#thinking-loader {
+    display: inline-block;
+    margin-left: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slide-in {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes scale-vs {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.fade-in {
+    animation: fade-in 1s ease-out;
+}
+
+.slide-in {
+    animation: slide-in 0.8s ease-out;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+@media (max-width: 480px) {
+    #board, #memory-board {
+        width: 100%;
+    }
+    .cell {
+        height: 80px;
+    }
+    .card {
+        height: 60px;
+    }
+  }
