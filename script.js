@@ -10,6 +10,11 @@ const nishaQuote = document.getElementById('nisha-quote');
 const gamesSection = document.getElementById('games-section');
 const leaderboardSection = document.getElementById('leaderboard-section');
 const leaderboardList = document.getElementById('leaderboard');
+const secretsBtn = document.getElementById('secrets-btn');
+const passwordSection = document.getElementById('password-section');
+const passwordInput = document.getElementById('password-input');
+const submitPasswordBtn = document.getElementById('submit-password');
+const passwordError = document.getElementById('password-error');
 
 let userName = ''; // No localStorage, reset on load
 let scores = JSON.parse(localStorage.getItem('scores')) || { tic: 0, rps: 0, memory: 0 }; // Keep scores in localStorage
@@ -46,6 +51,20 @@ updateNameBtn.addEventListener('click', () => {
     }
 });
 
+secretsBtn.addEventListener('click', () => showSection(passwordSection));
+
+submitPasswordBtn.addEventListener('click', () => {
+    const password = passwordInput.value.trim();
+    if (password === '143') {
+        passwordInput.value = '';
+        passwordError.classList.add('hidden');
+        window.location.href = 'secrets.html'; // Redirect to new page
+    } else {
+        passwordError.classList.remove('hidden');
+        passwordInput.value = '';
+    }
+});
+
 function showDashboard() {
     // Hide welcome screen
     welcomeNote.classList.add('hidden');
@@ -55,6 +74,7 @@ function showDashboard() {
     dashboardSection.classList.remove('hidden');
     gamesSection.classList.add('hidden');
     leaderboardSection.classList.add('hidden');
+    passwordSection.classList.add('hidden');
     dashboardWelcome.textContent = `Hello, ${userName}! Welcome to your dashboard.`;
     if (userName.toLowerCase().includes('nisha')) {
         nishaQuote.textContent = lovelyQuotes[Math.floor(Math.random() * lovelyQuotes.length)];
@@ -92,6 +112,7 @@ function showSection(section) {
     game1.classList.add('hidden');
     game2.classList.add('hidden');
     game3.classList.add('hidden');
+    passwordSection.classList.add('hidden');
     section.classList.remove('hidden');
 }
 
