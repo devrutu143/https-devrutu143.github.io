@@ -1,433 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RutuDev – Mini App</title>
-  <meta name="theme-color" content="#111827" />
-  <style>
-    :root{
-      --bg: #0b1220;          /* dark navy */
-      --card: #111827;        /* almost black */
-      --text: #e5e7eb;        /* light gray */
-      --muted: #9ca3af;       /* gray */
-      --brand1: #7c3aed;      /* violet */
-      --brand2: #22d3ee;      /* cyan */
-      --accent: #10b981;      /* emerald */
-      --danger: #ef4444;      /* red */
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius: 18px;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(1200px 600px at 10% -10%, rgba(124,58,237,.25), transparent 55%),
-        radial-gradient(1200px 600px at 110% 110%, rgba(34,211,238,.25), transparent 60%),
-        var(--bg);
-      overflow: hidden;
-    }
-    /* Layout */
-    .wrap{ height: 100%; display: grid; place-items: center; padding: 16px; }
-    .card{
-      width: min(720px, 100%);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: clip;
-    }
-    header{
-      padding: 18px 22px;
-      background: linear-gradient(90deg, rgba(124,58,237,.25), rgba(34,211,238,.2));
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    header .title{ font-weight: 800; letter-spacing:.3px; }
-    header .tag{ font-size: 12px; opacity:.9; padding:6px 10px; border-radius: 999px; background: rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.08); }
-    main{ padding: 22px; }
-
-    /* Screens */
-    .screen{ display:none; animation: fade .4s ease both; }
-    .screen.active{ display:block; }
-    @keyframes fade{ from{ opacity:0; transform: translateY(8px) } to{ opacity:1; transform:none } }
-
-    /* Welcome */
-    .stack{ display:grid; gap:16px; }
-    .input{
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: 14px;
-      padding: 14px 16px;
-      color: var(--text);
-      outline: none;
-      width: 100%;
-    }
-    .row{ display:flex; gap:10px; align-items:center; }
-
-    .btn{
-      appearance: none; border:0; cursor:pointer;
-      padding: 12px 16px; border-radius: 14px; font-weight: 700; letter-spacing:.2px;
-      background: linear-gradient(90deg, var(--brand1), var(--brand2)); color: #0b1020;
-      box-shadow: 0 8px 20px rgba(124,58,237,.35), inset 0 0 0 1px rgba(255,255,255,.15);
-      transition: transform .15s ease, filter .2s ease;
-    }
-    .btn:active{ transform: translateY(1px) scale(.99); }
-    .btn.secondary{ background: rgba(255,255,255,.06); color: var(--text); box-shadow:none; border:1px solid rgba(255,255,255,.08); }
-    .muted{ color: var(--muted); font-size: 14px; }
-
-    /* Flicker text */
-    .flicker{
-      font-weight: 700; letter-spacing: .6px; margin-top: 6px; 
-      text-transform: uppercase; font-size: 14px; opacity:.85;
-      animation: flicker 2.4s linear infinite;
-    }
-    @keyframes flicker{ 0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity:1 } 20%, 24%, 55% { opacity:.25 } }
-
-    /* Dashboard */
-    .grid{ display:grid; grid-template-columns: repeat( auto-fit, minmax(220px, 1fr) ); gap:16px; }
-    .tile{
-      background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius: 16px; padding:16px; position: relative; overflow:hidden;
-    }
-    .tile h3{ margin:0 0 6px; }
-    .mini{ font-size:12px; opacity:.85; }
-
-    /* Game */
-    .game-wrap{ display:grid; gap:14px; }
-    .hud{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .badge{ font-size:12px; padding:6px 9px; border-radius:999px; background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); }
-    .game-area{
-      position: relative; height: 360px; border-radius: 18px; overflow: hidden;
-      background:
-        radial-gradient(800px 400px at 20% 0%, rgba(124,58,237,.15), transparent 60%),
-        radial-gradient(800px 400px at 80% 120%, rgba(34,211,238,.15), transparent 60%),
-        rgba(255,255,255,.03);
-      border: 1px dashed rgba(255,255,255,.12);
-    }
-    .target{
-      position:absolute; width:54px; height:54px; border-radius:50%; display:grid; place-items:center; font-weight:800;
-      background: radial-gradient(circle at 30% 30%, #fff, #ddd 45%, #bbb 70%);
-      color:#0b0f1e; user-select:none; box-shadow:0 8px 20px rgba(0,0,0,.35);
-      transform: translate(-50%, -50%);
-      transition: transform .05s ease;
-    }
-    .target:active{ transform: translate(-50%, -50%) scale(.96); }
-    .countdown{ font-variant-numeric: tabular-nums; }
-
-    /* Footer */
-    footer{ padding: 12px 18px; font-size: 12px; color: var(--muted); display:flex; justify-content:space-between; gap:12px; }
-
-    /* Utility */
-    .hide{ display:none !important; }
-    .center{ text-align:center; }
-    .lg{ font-size: 26px; font-weight:800; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+    <title>Fun Games App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <div class="title">RutuDev • Mini App</div>
-        <div class="tag" id="userTag">Guest</div>
-      </header>
-      <main>
-        <!-- Screen: Welcome -->
-        <section class="screen active" id="screen-welcome">
-          <div class="stack">
-            <div>
-              <div class="lg">Welcome! 👋</div>
-              <p class="muted">Enter your name to personalize your app.</p>
-            </div>
-            <div class="row">
-              <input id="nameInput" class="input" placeholder="Your name (e.g., Rutu)" maxlength="24" />
-              <button class="btn" id="startBtn">Start</button>
-            </div>
-            <p class="muted">Tip: Your name is saved on this device.</p>
-          </div>
+    <div class="container fade-in">
+        <header>
+            <h1 class="slide-in">Fun Games App</h1>
+            <div id="welcome-note" class="fade-in">Welcome! Enter your name to start.</div>
+            <input type="text" id="user-name" placeholder="Enter your name..." class="input-field">
+            <button id="save-name" class="btn">Save Name</button>
+        </header>
+        
+        <section id="dashboard-section" class="hidden">
+            <h2 class="fade-in">Dashboard</h2>
+            <p id="dashboard-welcome"></p>
+            <input type="text" id="update-name" placeholder="Update your name..." class="input-field">
+            <button id="update-name-btn" class="btn">Update Name</button>
+            <div id="nisha-quote" class="hidden quote"></div>
+            <button id="games-btn" class="btn game-btn">Play Games</button>
+            <button id="leaderboard-btn" class="btn game-btn">View Leaderboard</button>
         </section>
-
-        <!-- Screen: Hello + Flicker -->
-        <section class="screen" id="screen-hello">
-          <div class="center" style="padding: 30px 10px;">
-            <div class="lg" id="helloText">Hello, Rutu</div>
-            <div class="flicker">Click anywhere for next</div>
-          </div>
+        
+        <section id="games-section" class="hidden">
+            <h2 class="fade-in">Choose a Game</h2>
+            <button id="game1-btn" class="btn game-btn">Tic-Tac-Toe</button>
+            <button id="game2-btn" class="btn game-btn">Rock-Paper-Scissors</button>
+            <button id="game3-btn" class="btn game-btn">Memory Match</button>
+            <button class="btn back-btn">Back to Dashboard</button>
         </section>
-
-        <!-- Screen: Dashboard -->
-        <section class="screen" id="screen-dash">
-          <div class="stack">
-            <div>
-              <div class="lg" id="dashGreeting">Dashboard</div>
-              <p class="muted">Choose an option to get started.</p>
-            </div>
-            <div class="grid">
-              <div class="tile">
-                <h3>🎯 Target Game</h3>
-                <p class="mini">Test your reflexes. Tap the circle as it jumps!</p>
-                <div class="row" style="margin-top:10px;">
-                  <button class="btn" id="openGame">Play</button>
-                  <button class="btn secondary" id="howTo">How to play</button>
-                </div>
-              </div>
-              <div class="tile">
-                <h3>👤 Profile</h3>
-                <p class="mini">Update your name anytime.</p>
-                <button class="btn secondary" id="changeName">Change Name</button>
-              </div>
-              <div class="tile">
-                <h3>ℹ️ About</h3>
-                <p class="mini">Built with pure HTML, CSS & JS.</p>
-                <button class="btn secondary" id="aboutBtn">Show</button>
-              </div>
-            </div>
-          </div>
+        
+        <!-- Game 1: Tic-Tac-Toe -->
+        <section id="game1" class="game-container hidden">
+            <h2>Tic-Tac-Toe vs Rutu</h2>
+            <select id="difficulty" class="input-field">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hardcore">Hardcore</option>
+            </select>
+            <div id="board"></div>
+            <p id="message">Your turn (X)<span id="thinking-loader" class="hidden"> ⏳</span></p>
+            <button id="reset-tic" class="btn">Reset</button>
+            <button class="btn back-btn">Back to Dashboard</button>
         </section>
-
-        <!-- Screen: Game -->
-        <section class="screen" id="screen-game">
-          <div class="game-wrap">
-            <div class="row" style="justify-content:space-between; align-items:center;">
-              <div style="font-weight:800">🎯 Target Game</div>
-              <button class="btn secondary" id="backToDash">← Back</button>
+        
+        <!-- Game 2: Rock-Paper-Scissors -->
+        <section id="game2" class="game-container hidden">
+            <h2>Rock-Paper-Scissors</h2>
+            <div class="choices-container">
+                <button class="choice" data-choice="rock">Rock</button>
+                <span id="vs-graphic" class="hidden">⚡</span>
+                <button class="choice" data-choice="paper">Paper</button>
+                <button class="choice" data-choice="scissors">Scissors</button>
             </div>
-            <div class="hud">
-              <span class="badge">⏱️ Time: <span class="countdown" id="timeLeft">30</span>s</span>
-              <span class="badge">Score: <strong id="score">0</strong></span>
-              <span class="badge">Best: <strong id="best">0</strong></span>
-            </div>
-            <div class="game-area" id="gameArea">
-              <div class="target hide" id="target">+1</div>
-            </div>
-            <div class="row">
-              <button class="btn" id="startGame">Start</button>
-              <button class="btn secondary" id="pauseGame">Pause</button>
-              <button class="btn secondary" id="resetGame">Reset</button>
-            </div>
-            <p class="muted" id="tips">Tip: Tap the target quickly—missing wastes time!</p>
-          </div>
+            <p id="result"></p>
+            <p>Score: <span id="score">0</span></p>
+            <button class="btn back-btn">Back to Dashboard</button>
         </section>
-      </main>
-      <footer>
-        <span>© <span id="year"></span> RutuDev</span>
-        <span>Made with ❤️ using HTML • CSS • JS</span>
-      </footer>
+        
+        <!-- Game 3: Memory Match -->
+        <section id="game3" class="game-container hidden">
+            <h2>Memory Match</h2>
+            <div id="memory-board"></div>
+            <p>Moves: <span id="moves">0</span></p>
+            <button id="reset-memory" class="btn">Reset</button>
+            <button class="btn back-btn">Back to Dashboard</button>
+        </section>
+        
+        <section id="leaderboard-section" class="hidden">
+            <h2 class="fade-in">Leaderboard</h2>
+            <ul id="leaderboard"></ul>
+            <button class="btn back-btn">Back to Dashboard</button>
+        </section>
+        
+        <footer>
+            <p>Made by Rutu😎</p>
+        </footer>
     </div>
-  </div>
-
-  <script>
-    // Utility: element helpers
-    const qs = (s, r=document) => r.querySelector(s);
-    const qsa = (s, r=document) => [...r.querySelectorAll(s)];
-
-    // Screen manager
-    const screens = {
-      welcome: qs('#screen-welcome'),
-      hello: qs('#screen-hello'),
-      dash: qs('#screen-dash'),
-      game: qs('#screen-game')
-    };
-    function show(id){
-      Object.values(screens).forEach(el => el.classList.remove('active'));
-      screens[id].classList.add('active');
-    }
-
-    // Name persistence
-    const NAME_KEY = 'rutu_name_v1';
-    function saveName(n){ localStorage.setItem(NAME_KEY, n); }
-    function getName(){ return localStorage.getItem(NAME_KEY) || ''; }
-
-    // UI elements
-    const nameInput = qs('#nameInput');
-    const startBtn = qs('#startBtn');
-    const helloText = qs('#helloText');
-    const userTag = qs('#userTag');
-    const dashGreeting = qs('#dashGreeting');
-
-    const openGame = qs('#openGame');
-    const howTo = qs('#howTo');
-    const changeName = qs('#changeName');
-    const aboutBtn = qs('#aboutBtn');
-
-    const backToDash = qs('#backToDash');
-
-    // Game elements
-    const gameArea = qs('#gameArea');
-    const target = qs('#target');
-    const startGameBtn = qs('#startGame');
-    const pauseGameBtn = qs('#pauseGame');
-    const resetGameBtn = qs('#resetGame');
-    const timeLeftEl = qs('#timeLeft');
-    const scoreEl = qs('#score');
-    const bestEl = qs('#best');
-    const tipsEl = qs('#tips');
-
-    let greetTimeout;
-
-    function init(){
-      qs('#year').textContent = new Date().getFullYear();
-      const saved = getName();
-      if(saved){
-        nameInput.value = saved;
-        userTag.textContent = saved;
-        helloText.textContent = `Hello, ${saved}`;
-        dashGreeting.textContent = `Hello, ${saved}!`;
-        show('hello');
-        // Move to dashboard on any click
-        screens.hello.addEventListener('click', goToDashOnce, { once:true });
-        // Auto-advance if user doesn't click in 2.5s
-        greetTimeout = setTimeout(() => goToDashOnce(), 2500);
-      }else{
-        show('welcome');
-      }
-
-      // Best score
-      bestEl.textContent = localStorage.getItem('rutu_best_v1') || 0;
-    }
-
-    function goToDashOnce(){
-      clearTimeout(greetTimeout);
-      show('dash');
-    }
-
-    startBtn.addEventListener('click', () => {
-      const name = nameInput.value.trim() || 'Rutu';
-      saveName(name);
-      userTag.textContent = name;
-      helloText.textContent = `Hello, ${name}`;
-      dashGreeting.textContent = `Hello, ${name}!`;
-      show('hello');
-      screens.hello.addEventListener('click', goToDashOnce, { once:true });
-      greetTimeout = setTimeout(() => goToDashOnce(), 2500);
-    });
-
-    changeName.addEventListener('click', () => {
-      const current = getName() || '';
-      const next = prompt('Enter your name:', current);
-      if(next !== null){
-        const name = next.trim().slice(0,24) || 'Rutu';
-        saveName(name);
-        userTag.textContent = name;
-        dashGreeting.textContent = `Hello, ${name}!`;
-        alert('Name updated!');
-      }
-    });
-
-    aboutBtn.addEventListener('click', () => {
-      alert('Mini App made for Rutu – pure HTML, CSS & JS. No frameworks needed. Enjoy!');
-    });
-
-    howTo.addEventListener('click', () => {
-      alert('Tap the moving circle to score points. You have 30 seconds. Try to beat your best score!');
-    });
-
-    openGame.addEventListener('click', () => show('game'));
-    backToDash.addEventListener('click', () => show('dash'));
-
-    // -------------------- GAME LOGIC --------------------
-    let playing = false;
-    let score = 0;
-    let timeLeft = 30;
-    let timerId = null;
-    let moverId = null;
-
-    function rand(min, max){ return Math.random() * (max - min) + min; }
-    function placeTarget(){
-      const rect = gameArea.getBoundingClientRect();
-      const pad = 30; // padding inside area
-      const x = rand(pad, rect.width - pad);
-      const y = rand(pad, rect.height - pad);
-      target.style.left = x + 'px';
-      target.style.top = y + 'px';
-    }
-
-    function moveTargetLoop(){
-      // Jump every 700–1000ms, faster when score grows
-      const base = Math.max(350, 1000 - score * 10);
-      const next = rand(base * .8, base * 1.2);
-      moverId = setTimeout(() => { placeTarget(); moveTargetLoop(); }, next);
-    }
-
-    function startGame(){
-      if(playing) return;
-      playing = true;
-      target.classList.remove('hide');
-      tipsEl.textContent = 'Go! Tap as fast as you can!';
-      placeTarget();
-      moveTargetLoop();
-      timerId = setInterval(() => {
-        timeLeft -= 1;
-        timeLeftEl.textContent = timeLeft;
-        if(timeLeft <= 0){ endGame(); }
-      }, 1000);
-    }
-
-    function pauseGame(){
-      if(!playing) return;
-      playing = false;
-      clearInterval(timerId); timerId = null;
-      clearTimeout(moverId); moverId = null;
-      tipsEl.textContent = 'Paused. Press Start to resume.';
-    }
-
-    function resetGame(){
-      pauseGame();
-      score = 0; scoreEl.textContent = score;
-      timeLeft = 30; timeLeftEl.textContent = timeLeft;
-      target.classList.add('hide');
-      tipsEl.textContent = 'Tip: Tap the target quickly—missing wastes time!';
-    }
-
-    function endGame(){
-      pauseGame();
-      target.classList.add('hide');
-      tipsEl.textContent = `Time! Your score: ${score}`;
-      const best = Number(localStorage.getItem('rutu_best_v1') || 0);
-      if(score > best){
-        localStorage.setItem('rutu_best_v1', String(score));
-        bestEl.textContent = score;
-        setTimeout(() => alert('🎉 New Best Score! ' + score), 50);
-      }
-    }
-
-    // Target click handler
-    target.addEventListener('click', (e) => {
-      if(!playing) return;
-      score += 1;
-      scoreEl.textContent = score;
-      // tiny pop
-      target.style.transform = 'translate(-50%, -50%) scale(.92)';
-      setTimeout(() => target.style.transform = 'translate(-50%, -50%)', 60);
-      // move immediately on hit
-      placeTarget();
-      e.stopPropagation();
-    });
-
-    // Miss click reduces time slightly
-    gameArea.addEventListener('click', () => {
-      if(!playing) return;
-      timeLeft = Math.max(0, timeLeft - 1); // penalty
-      timeLeftEl.textContent = timeLeft;
-      if(timeLeft === 0) endGame();
-    });
-
-    startGameBtn.addEventListener('click', startGame);
-    pauseGameBtn.addEventListener('click', pauseGame);
-    resetGameBtn.addEventListener('click', resetGame);
-
-    // Keyboard support (desktop)
-    window.addEventListener('keydown', (e) => {
-      if(e.key === ' '){ e.preventDefault(); playing ? pauseGame() : startGame(); }
-      if(e.key.toLowerCase() === 'r'){ resetGame(); }
-      if(e.key === 'Escape'){ show('dash'); }
-    });
-
-    // Init after DOM load
-    document.addEventListener('DOMContentLoaded', init);
-  </script>
-</body>
-    </html>
     
+    <script src="script.js"></script>
+</body>
+                  </html>
