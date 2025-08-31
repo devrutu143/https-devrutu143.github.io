@@ -1,3 +1,4 @@
+// Unchanged from previous version
 // User Name Handling
 const userNameInput = document.getElementById('user-name');
 const saveNameBtn = document.getElementById('save-name');
