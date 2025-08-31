@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>Fun Games App</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
-    
 </head>
 <body>
     <div class="container fade-in">
@@ -26,6 +25,15 @@
             <div id="nisha-quote" class="hidden quote"></div>
             <button id="games-btn" class="btn game-btn">Play Games</button>
             <button id="leaderboard-btn" class="btn game-btn">View Leaderboard</button>
+            <button id="secrets-btn" class="btn game-btn">Secret's</button>
+        </section>
+        
+        <section id="password-section" class="hidden">
+            <h2 class="fade-in">Enter Password for Secret's</h2>
+            <input type="password" id="password-input" placeholder="Enter password..." class="input-field">
+            <button id="submit-password" class="btn">Submit</button>
+            <p id="password-error" class="error hidden">Wrong</p>
+            <button class="btn back-btn">Back to Dashboard</button>
         </section>
         
         <section id="games-section" class="hidden">
@@ -86,4 +94,4 @@
     
     <script src="script.js"></script>
 </body>
-                  </html>
+</html>
