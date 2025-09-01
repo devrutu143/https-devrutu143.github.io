@@ -231,6 +231,23 @@ header h1 {
     animation: shake 0.3s ease;
 }
 
+/* Flappy Rutu Styles */
+#flappy-canvas {
+    border: 2px solid #ab47bc;
+    border-radius: 8px;
+    margin: 20px auto;
+    max-width: 100%;
+    width: 300px;
+    height: 400px;
+    background: linear-gradient(135deg, #e1bee7, #ce93d8);
+}
+
+#flappy-message {
+    color: #6a1b9a;
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
 @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -266,6 +283,12 @@ header h1 {
     100% { transform: translateX(0); }
 }
 
+@keyframes sparkle {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 .fade-in {
     animation: fade-in 1s ease-out;
 }
@@ -282,7 +305,7 @@ footer {
 }
 
 @media (max-width: 480px) {
-    #board, #memory-board {
+    #board, #memory-board, #flappy-canvas {
         width: 100%;
     }
     .cell {
@@ -293,5 +316,8 @@ footer {
     }
     .photo-frame {
         width: 90%;
+    }
+    #flappy-canvas {
+        height: 300px;
     }
     }
