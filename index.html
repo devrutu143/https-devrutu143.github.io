@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>Fun Games App</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
@@ -59,6 +59,7 @@
             <button id="game1-btn" class="btn game-btn">Tic-Tac-Toe</button>
             <button id="game2-btn" class="btn game-btn">Rock-Paper-Scissors</button>
             <button id="game3-btn" class="btn game-btn">Memory Match</button>
+            <button id="game4-btn" class="btn game-btn">Flappy Rutu</button>
             <button class="btn back-btn">Back to Dashboard</button>
         </section>
         
@@ -99,6 +100,16 @@
             <button class="btn back-btn">Back to Dashboard</button>
         </section>
         
+        <!-- Game 4: Flappy Rutu -->
+        <section id="game4" class="game-container hidden">
+            <h2>Flappy Rutu 😜</h2>
+            <canvas id="flappy-canvas"></canvas>
+            <p>Score: <span id="flappy-score">0</span></p>
+            <p id="flappy-message" class="hidden"></p>
+            <button id="reset-flappy" class="btn">Retry</button>
+            <button class="btn back-btn">Back to Dashboard</button>
+        </section>
+        
         <section id="leaderboard-section" class="hidden">
             <h2 class="fade-in">Leaderboard</h2>
             <ul id="leaderboard"></ul>
@@ -112,4 +123,4 @@
     
     <script src="script.js"></script>
 </body>
-    </html>
+                </html>
