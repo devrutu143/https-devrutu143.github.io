@@ -19,7 +19,7 @@ const passwordError = document.getElementById('password-error');
 const nextWebsiteBtn = document.getElementById('next-website-btn');
 
 let userName = ''; // No localStorage, reset on load
-let scores = JSON.parse(localStorage.getItem('scores')) || { tic: 0, rps: 0, memory: 0 }; // Keep scores in localStorage
+let scores = JSON.parse(localStorage.getItem('scores')) || { tic: 0, rps: 0, memory: 0, flappy: 0 }; // Added flappy score
 
 const lovelyQuotes = [
     "Your smile lights up the world like a starry night.",
@@ -68,7 +68,7 @@ submitPasswordBtn.addEventListener('click', () => {
 });
 
 nextWebsiteBtn.addEventListener('click', () => {
-    window.location.href = 'https://www.youtube.com';
+    window.location.href = 'https://devrutu143.github.io/https-devrutu243.github.io/';
 });
 
 function showDashboard() {
@@ -97,15 +97,18 @@ const leaderboardBtn = document.getElementById('leaderboard-btn');
 const game1Btn = document.getElementById('game1-btn');
 const game2Btn = document.getElementById('game2-btn');
 const game3Btn = document.getElementById('game3-btn');
+const game4Btn = document.getElementById('game4-btn');
 const game1 = document.getElementById('game1');
 const game2 = document.getElementById('game2');
 const game3 = document.getElementById('game3');
+const game4 = document.getElementById('game4');
 
 gamesBtn.addEventListener('click', () => showSection(gamesSection));
 leaderboardBtn.addEventListener('click', () => showSection(leaderboardSection));
 game1Btn.addEventListener('click', () => showSection(game1));
 game2Btn.addEventListener('click', () => showSection(game2));
 game3Btn.addEventListener('click', () => showSection(game3));
+game4Btn.addEventListener('click', () => showSection(game4));
 
 const backBtns = document.querySelectorAll('.back-btn');
 backBtns.forEach(btn => {
@@ -119,6 +122,7 @@ function showSection(section) {
     game1.classList.add('hidden');
     game2.classList.add('hidden');
     game3.classList.add('hidden');
+    game4.classList.add('hidden');
     passwordSection.classList.add('hidden');
     secretsSection.classList.add('hidden');
     section.classList.remove('hidden');
@@ -130,12 +134,15 @@ function loadLeaderboard() {
         <li>Tic-Tac-Toe Wins: ${scores.tic}</li>
         <li>Rock-Paper-Scissors Score: ${scores.rps}</li>
         <li>Memory Match Best Moves: ${scores.memory || 'N/A'}</li>
+        <li>Flappy Rutu Best Score: ${scores.flappy || 'N/A'}</li>
     `;
 }
 
 function updateScore(game, value) {
     if (game === 'memory') {
         if (!scores.memory || value < scores.memory) scores.memory = value;
+    } else if (game === 'flappy') {
+        if (!scores.flappy || value > scores.flappy) scores.flappy = value;
     } else {
         scores[game] += value;
     }
@@ -394,3 +401,119 @@ function handleCardClick(e) {
 
 resetMemory.addEventListener('click', initMemory);
 initMemory();
+
+// Game 4: Flappy Rutu
+const flappyCanvas = document.getElementById('flappy-canvas');
+const flappyScoreEl = document.getElementById('flappy-score');
+const flappyMessage = document.getElementById('flappy-message');
+const resetFlappy = document.getElementById('reset-flappy');
+const ctx = flappyCanvas ? flappyCanvas.getContext('2d') : null;
+
+let bird = { x: 50, y: 150, vy: 0, gravity: 0.6, jump: -10, size: 20 };
+let pipes = [];
+let hearts = [];
+let flappyScore = 0;
+let flappyGameActive = false;
+let frameCount = 0;
+
+function initFlappy() {
+    flappyCanvas.width = 300;
+    flappyCanvas.height = 400;
+    bird = { x: 50, y: 150, vy: 0, gravity: 0.6, jump: -10, size: 20 };
+    pipes = [];
+    hearts = [];
+    flappyScore = 0;
+    flappyScoreEl.textContent = flappyScore;
+    flappyMessage.classList.add('hidden');
+    flappyGameActive = true;
+    frameCount = 0;
+    pipes.push({ x: flappyCanvas.width, gapY: Math.random() * 200 + 100 });
+    if (!flappyCanvas.onclick) {
+        flappyCanvas.onclick = () => {
+            if (flappyGameActive) bird.vy = bird.jump;
+        };
+    }
+    requestAnimationFrame(updateFlappy);
+}
+
+function updateFlappy() {
+    if (!flappyGameActive) return;
+
+    // Update bird
+    bird.vy += bird.gravity;
+    bird.y += bird.vy;
+    if (bird.y + bird.size > flappyCanvas.height || bird.y < 0) {
+        endFlappyGame();
+        return;
+    }
+
+    // Update pipes
+    frameCount++;
+    if (frameCount % 90 === 0) {
+        pipes.push({ x: flappyCanvas.width, gapY: Math.random() * 200 + 100 });
+    }
+    pipes.forEach(pipe => {
+        pipe.x -= 2;
+        if (pipe.x + 50 < 0) pipes.shift();
+        if (
+            bird.x + bird.size > pipe.x && bird.x < pipe.x + 50 &&
+            (bird.y < pipe.gapY - 70 || bird.y + bird.size > pipe.gapY + 70)
+        ) {
+            endFlappyGame();
+            return;
+        }
+        if (pipe.x + 50 < bird.x && !pipe.scored) {
+            flappyScore++;
+            flappyScoreEl.textContent = flappyScore;
+            pipe.scored = true;
+        }
+    });
+
+    // Update hearts
+    if (frameCount % 150 === 0) {
+        hearts.push({ x: flappyCanvas.width, y: Math.random() * (flappyCanvas.height - 20) });
+    }
+    hearts.forEach(heart => {
+        heart.x -= 2;
+        if (
+            bird.x + bird.size > heart.x && bird.x < heart.x + 15 &&
+            bird.y + bird.size > heart.y && bird.y < heart.y + 15
+        ) {
+            flappyScore += 5;
+            flappyScoreEl.textContent = flappyScore;
+            hearts.splice(hearts.indexOf(heart), 1);
+        }
+    });
+    if (hearts.length > 0 && hearts[0].x < -15) hearts.shift();
+
+    // Draw
+    ctx.clearRect(0, 0, flappyCanvas.width, flappyCanvas.height);
+    // Draw bird
+    ctx.fillStyle = '#ffca28';
+    ctx.font = '20px Arial';
+    ctx.fillText('😜', bird.x, bird.y);
+    // Draw pipes
+    ctx.fillStyle = '#7b1fa2';
+    pipes.forEach(pipe => {
+        ctx.fillRect(pipe.x, 0, 50, pipe.gapY - 70);
+        ctx.fillRect(pipe.x, pipe.gapY + 70, 50, flappyCanvas.height - pipe.gapY - 70);
+    });
+    // Draw hearts
+    ctx.fillStyle = '#e91e63';
+    ctx.font = '15px Arial';
+    hearts.forEach(heart => {
+        ctx.fillText('💕', heart.x, heart.y);
+    });
+
+    requestAnimationFrame(updateFlappy);
+}
+
+function endFlappyGame() {
+    flappyGameActive = false;
+    flappyMessage.textContent = `Rutu crashed! Score: ${flappyScore} 🚀 Try again?`;
+    flappyMessage.classList.remove('hidden');
+    updateScore('flappy', flappyScore);
+}
+
+resetFlappy.addEventListener('click', initFlappy);
+if (game4) initFlappy();
